@@ -1,8 +1,4 @@
 {
-  "compilerOptions": {
-    "outDir": "./built",
-    "allowJs": true,
-  },
   "files": [],
   "references": [
     {
