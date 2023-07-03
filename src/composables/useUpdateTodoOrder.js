@@ -7,7 +7,6 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export default function useUpdateTodoOrder() {
   const updateTodoItem = async (cardItem, todoIndex) => {
     const updatedTodos = cardItem.todos.map((todo, index) => {
-      console.log('todoIndex', todoIndex);
       if (index === todoIndex) {
         return { item: cardItem.newItem };
       }
