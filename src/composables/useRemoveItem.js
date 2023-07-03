@@ -6,21 +6,13 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function useRemoveItem() {
   const removeItem = async (cardItem, todoIndex) => {
-    if (todoIndex > -1) {
-      const removedTodo = cardItem.todos.splice(todoIndex, 1)[0];
+    const todos = cardItem.todos;
+    const removedItem = todos.splice(todoIndex, 1)[0];
 
-      const { data, error } = await supabase
-        .from(cardItem.table)
-        .delete()
-        .match({ item: removedTodo });
-
-      if (error) {
-        console.error(error);
-      } else {
-        console.log(data);
-      }
-    }
+    // Remove the item from the source table
+    await supabase.from(cardItem.table).delete().match({ item: removedItem });
   };
+
   return {
     removeItem,
   };

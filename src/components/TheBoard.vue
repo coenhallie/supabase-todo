@@ -14,41 +14,12 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-
-// composables
-const { saveTodo, editTodoIndex } = useSaveTodo();
-const { updateTodoItem } = useUpdateTodoOrder();
 const { addItem } = useAddItem();
 const { removeItem } = useRemoveItem();
 
 const todoItems = ref(['']);
 const inProgressItems = ref(['']);
 const doneItems = ref(['']);
-
-const getTodos = (cardItem) => {
-  return cardItem.todos;
-};
-
-const hoverIndex = ref({ cardIndex: -1, todoIndex: -1 });
-
-const setHoverIndex = (cardIndex, todoIndex) => {
-  hoverIndex.value = { cardIndex, todoIndex };
-};
-
-const toggleInput = (cardItem) => {
-  cardItem.showInput = !cardItem.showInput;
-};
-
-const editTodo = (cardIndex, todoIndex) => {
-  editTodoIndex.value = { cardIndex, todoIndex };
-};
-
-const isEditingTodo = (cardIndex, todoIndex) => {
-  return (
-    editTodoIndex.value.cardIndex === cardIndex &&
-    editTodoIndex.value.todoIndex === todoIndex
-  );
-};
 
 const cardItems = [
   reactive({
@@ -74,7 +45,37 @@ const cardItems = [
   }),
 ];
 
+const hoverIndex = ref({ cardIndex: -1, todoIndex: -1 });
+
+const setHoverIndex = (cardIndex, todoIndex) => {
+  hoverIndex.value = { cardIndex, todoIndex };
+};
+
+const toggleInput = (cardItem) => {
+  cardItem.showInput = !cardItem.showInput;
+};
+
+const editTodo = (cardIndex, todoIndex) => {
+  const cardItem = cardItems[cardIndex];
+  const tableName = cardItem.todos;
+
+  originalItem.value = tableName[todoIndex];
+  editTodoIndex.value = { cardIndex, todoIndex };
+};
+
+const originalItem = ref('');
+
+const { saveTodo, editTodoIndex } = useSaveTodo(originalItem);
+
+const isEditingTodo = (cardIndex, todoIndex) => {
+  return (
+    editTodoIndex.value.cardIndex === cardIndex &&
+    editTodoIndex.value.todoIndex === todoIndex
+  );
+};
+
 const { fetchItems } = useFetchItems(cardItems);
+const { updateTodoItem } = useUpdateTodoOrder();
 
 onMounted(() => {
   fetchItems();
@@ -94,9 +95,9 @@ onMounted(() => {
         v-model="cardItem.todos"
         tag="ul"
         group="todos"
-        :animation="300"
+        :animation="400"
         :itemKey="(item, index) => index"
-        @change="updateTodoItem(cardItem, getTodos(cardItem))"
+        @change="updateTodoItem(cardItem, todoIndex)"
       >
         <template
           v-for="(todo, todoIndex) in cardItem.todos"
