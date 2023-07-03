@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, computed, reactive } from 'vue';
 import draggable from 'vuedraggable';
 import CardItem from './CardItem.vue';
