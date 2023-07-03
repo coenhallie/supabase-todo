@@ -1,13 +1,15 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "allowJs": true
+    "outDir": "./built",
+    "allowJs": true,
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.js"
-  ],
-  "exclude": [
-    "node_modules"
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
   ]
 }
