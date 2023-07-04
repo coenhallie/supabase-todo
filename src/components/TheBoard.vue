@@ -96,7 +96,7 @@ onMounted(() => {
         group="todos"
         :animation="400"
         :itemKey="(item, index) => index"
-        @change="updateTodoItem(cardItem, todoIndex)"
+        @change="updateTodoItem(cardItem, index)"
       >
         <template
           v-for="(todo, todoIndex) in cardItem.todos"

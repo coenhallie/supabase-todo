@@ -5,11 +5,8 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function useUpdateTodoOrder() {
-  const updateTodoItem = async (cardItem, todoIndex) => {
-    const updatedTodos = cardItem.todos.map((todo, index) => {
-      if (index === todoIndex) {
-        return { item: cardItem.newItem };
-      }
+  const updateTodoItem = async (cardItem, index) => {
+    const updatedTodos = cardItem.todos.map((todo) => {
       return { item: todo };
     });
 
@@ -23,14 +20,13 @@ export default function useUpdateTodoOrder() {
     }
 
     const sourceItems = existingTodos.map((row) => row.item);
-    const removedItem = sourceItems[cardItem.index];
+    const removedItem = sourceItems[index];
 
     if (removedItem) {
       const { error: deleteError } = await supabase
         .from(cardItem.table)
         .delete()
-        .match({ item: removedItem })
-        .single();
+        .match({ item: removedItem });
 
       if (deleteError) {
         console.error(deleteError);
@@ -40,7 +36,7 @@ export default function useUpdateTodoOrder() {
 
     const { error: upsertError } = await supabase
       .from(cardItem.table)
-      .upsert(updatedTodos, { onConflict: ['item'], exclude: ['item'] });
+      .upsert(updatedTodos, { onConflict: ['item'] });
 
     if (upsertError) {
       console.error(upsertError);
