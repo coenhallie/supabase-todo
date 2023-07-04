@@ -9,7 +9,6 @@ export default function useRemoveItem() {
     const todos = cardItem.todos;
     const removedItem = todos.splice(todoIndex, 1)[0];
 
-    // Remove the item from the source table
     await supabase.from(cardItem.table).delete().match({ item: removedItem });
   };
 

@@ -25,7 +25,6 @@ export default function useUpdateTodoOrder() {
     const sourceItems = existingTodos.map((row) => row.item);
     const removedItem = sourceItems[cardItem.index];
 
-    // Remove the item from the source table
     if (removedItem) {
       const { error: deleteError } = await supabase
         .from(cardItem.table)
@@ -39,7 +38,6 @@ export default function useUpdateTodoOrder() {
       }
     }
 
-    // Upsert the updated items in the target table
     const { error: upsertError } = await supabase
       .from(cardItem.table)
       .upsert(updatedTodos, { onConflict: ['item'], exclude: ['item'] });

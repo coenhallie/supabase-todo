@@ -8,7 +8,7 @@ export default function useAddItem() {
   const addItem = async (cardItem, newItem) => {
     cardItem.todos.push(newItem);
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from(cardItem.table)
       .insert({ item: newItem });
 

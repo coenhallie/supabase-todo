@@ -14,12 +14,11 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-const { addItem } = useAddItem();
-const { removeItem } = useRemoveItem();
 
 const todoItems = ref(['']);
 const inProgressItems = ref(['']);
 const doneItems = ref(['']);
+const originalItem = ref('');
 
 const cardItems = [
   reactive({
@@ -45,6 +44,11 @@ const cardItems = [
   }),
 ];
 
+const { addItem } = useAddItem();
+const { removeItem } = useRemoveItem();
+const { fetchItems } = useFetchItems(cardItems);
+const { updateTodoItem } = useUpdateTodoOrder();
+
 const hoverIndex = ref({ cardIndex: -1, todoIndex: -1 });
 
 const setHoverIndex = (cardIndex, todoIndex) => {
@@ -63,8 +67,6 @@ const editTodo = (cardIndex, todoIndex) => {
   editTodoIndex.value = { cardIndex, todoIndex };
 };
 
-const originalItem = ref('');
-
 const { saveTodo, editTodoIndex } = useSaveTodo(originalItem);
 
 const isEditingTodo = (cardIndex, todoIndex) => {
@@ -73,9 +75,6 @@ const isEditingTodo = (cardIndex, todoIndex) => {
     editTodoIndex.value.todoIndex === todoIndex
   );
 };
-
-const { fetchItems } = useFetchItems(cardItems);
-const { updateTodoItem } = useUpdateTodoOrder();
 
 onMounted(() => {
   fetchItems();
